@@ -42,7 +42,9 @@ var Utils = /** @class */ (function () {
      * @param {string} command: Command to execute.
      */
     Utils.execute = function (command) {
-        return child_process_1.execSync(command).toString();
+        return child_process_1.execSync(command, {
+            windowsHide: true
+        }).toString();
     };
     return Utils;
 }());

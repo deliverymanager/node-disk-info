@@ -1,5 +1,5 @@
 import * as os from 'os';
-import {execSync} from 'child_process';
+import { execSync } from 'child_process';
 
 /**
  * Class with utilitary methods.
@@ -21,6 +21,8 @@ export class Utils {
      * @param {string} command: Command to execute.
      */
     public static execute(command: string): string {
-        return execSync(command).toString();
+        return execSync(command, {
+            windowsHide: true
+        }).toString();
     }
 }
