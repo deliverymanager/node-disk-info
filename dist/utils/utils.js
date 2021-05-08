@@ -37,14 +37,26 @@ var Utils = /** @class */ (function () {
         return os.platform().toLowerCase();
     };
     /**
+     * Get chcp value (only for Win32 platform).
+     *
+     * @return {string} Platform: win32.
+     */
+    Utils.chcp = function () {
+        return child_process_1.execSync('chcp').toString().split(':')[1].trim();
+    };
+    /**
      * Executes a command in SO console.
      *
-     * @param {string} command: Command to execute.
+     * @param {Buffer} command: Command to execute.
      */
     Utils.execute = function (command) {
+<<<<<<< HEAD
         return child_process_1.execSync(command, {
             windowsHide: true
         }).toString();
+=======
+        return child_process_1.execSync(command, { windowsHide: true, encoding: 'buffer' });
+>>>>>>> fc6631d7e055fa47df7f9bf1bf4fc44f7502ae1b
     };
     return Utils;
 }());
