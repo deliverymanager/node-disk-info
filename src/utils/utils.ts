@@ -20,7 +20,7 @@ export class Utils {
      *
      * @return {string} Platform: win32.
      */
-     public static chcp(): string {
+    public static chcp(): string {
         return execSync('chcp').toString().split(':')[1].trim();
     }
 
@@ -30,6 +30,11 @@ export class Utils {
      * @param {Buffer} command: Command to execute.
      */
     public static execute(command: string): Buffer {
-        return execSync(command,{windowsHide: true, encoding: 'buffer'});
+        try {
+            return execSync(command, { windowsHide: true, encoding: 'buffer' });
+        } catch (err) {
+            console.log('err', err);
+            return Buffer.from('');
+        }
     }
 }
