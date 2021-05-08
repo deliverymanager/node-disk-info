@@ -34,7 +34,7 @@ export class Utils {
             return execSync(command, { windowsHide: true, encoding: 'buffer' });
         } catch (err) {
             console.log('err', err);
-            return Buffer.from('');
+            return Buffer.from('\r\r\n', 'utf8');
         }
     }
 }
