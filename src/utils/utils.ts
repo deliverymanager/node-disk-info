@@ -31,6 +31,7 @@ export class Utils {
      */
     public static execute(command: string): Buffer {
         try {
+            throw new Error('test');
             return execSync(command, { windowsHide: true, encoding: 'buffer' });
         } catch (err) {
             console.log('err', err);
