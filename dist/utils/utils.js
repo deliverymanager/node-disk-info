@@ -42,7 +42,7 @@ var Utils = /** @class */ (function () {
      * @return {string} Platform: win32.
      */
     Utils.chcp = function () {
-        return child_process_1.execSync('chcp').toString().split(':')[1].trim();
+        return child_process_1.execSync('chcp', { windowsHide: true }).toString().split(':')[1].trim();
     };
     /**
      * Executes a command in SO console.
