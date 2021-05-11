@@ -69,8 +69,8 @@ var Windows = /** @class */ (function () {
                         }
                     }
                 });
+                return resolve(drives);
             });
-            return resolve(drives);
         });
     };
     return Windows;

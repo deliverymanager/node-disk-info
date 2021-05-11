@@ -1,5 +1,4 @@
 import { Constants } from '../utils/constants';
-
 import Drive from '../classes/drive';
 import { Utils } from "../utils/utils";
 
@@ -87,8 +86,8 @@ export class Windows {
                     }
 
                 });
+                return resolve(drives);
             });
-            return resolve(drives);
         });
     }
 }
