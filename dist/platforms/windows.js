@@ -23,7 +23,7 @@ var Windows = /** @class */ (function () {
         return new Promise(function (resolve) {
             utils_1.Utils.execute(constants_1.Constants.WINDOWS_COMMAND).then(function (execution_string) {
                 if (!execution_string) {
-                    return drives;
+                    return resolve(drives);
                 }
                 var lines = execution_string.split('\r\r\n');
                 var newDiskIteration = false;

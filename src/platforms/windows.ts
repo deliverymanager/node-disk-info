@@ -18,7 +18,7 @@ export class Windows {
             Utils.execute(Constants.WINDOWS_COMMAND).then((execution_string: any) => {
 
                 if (!execution_string) {
-                    return drives;
+                    return resolve(drives);
                 }
 
                 const lines = execution_string.split('\r\r\n');
