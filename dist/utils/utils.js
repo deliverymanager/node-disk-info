@@ -37,26 +37,6 @@ var Utils = /** @class */ (function () {
         return os.platform().toLowerCase();
     };
     /**
-     * Get chcp value (only for Win32 platform).
-     *
-     * @return {string} Platform: win32.
-     */
-    Utils.chcp = function () {
-        return new Promise(function (resolve) {
-            child_process_1.exec('chcp', { windowsHide: true }, function (error, stdout, stderr) {
-                if (error) {
-                    console.log('execSync', error);
-                    return resolve(null);
-                }
-                if (stderr) {
-                    console.log('stderr', stderr);
-                    return resolve(null);
-                }
-                return resolve(stdout);
-            });
-        });
-    };
-    /**
      * Executes a command in SO console.
      *
      * @param {Buffer} command: Command to execute.

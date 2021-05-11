@@ -43,8 +43,7 @@ function getDiskInfo() {
                     reject(new Error("Platform not supported: " + platform));
                     break;
                 case 'win32': // windows platform
-                    drivesInfo = windows_1.Windows.run();
-                    resolve(drivesInfo);
+                    windows_1.Windows.run().then(function (drivesInfo) { return resolve(drivesInfo); });
                     break;
                 default: // unknown platform
                     reject(new Error("Platform not recognized: " + platform));

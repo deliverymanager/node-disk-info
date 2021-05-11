@@ -8,5 +8,5 @@ export declare class Windows {
      *
      * @return {Drive[]} List of drives and their info.
      */
-    static run(): Drive[];
+    static run(): Promise<Drive[]>;
 }

@@ -7,7 +7,6 @@ exports.Windows = void 0;
 var constants_1 = require("../utils/constants");
 var drive_1 = __importDefault(require("../classes/drive"));
 var utils_1 = require("../utils/utils");
-var iconv_lite_1 = __importDefault(require("iconv-lite"));
 /**
  * Class with Windows specific logic to get disk info.
  */
@@ -21,40 +20,12 @@ var Windows = /** @class */ (function () {
      */
     Windows.run = function () {
         var drives = [];
-        utils_1.Utils.execute(constants_1.Constants.WINDOWS_COMMAND).then(function (execution_string) {
-            if (!execution_string) {
-                return;
-            }
-            utils_1.Utils.chcp().then(function (cp) {
-                console.log('cp', cp);
-                if (!cp) {
-                    return;
+        return new Promise(function (resolve) {
+            utils_1.Utils.execute(constants_1.Constants.WINDOWS_COMMAND).then(function (execution_string) {
+                if (!execution_string) {
+                    return drives;
                 }
-                if (cp) {
-                    var splitted = cp.split(':');
-                    if (splitted && splitted.length) {
-                        cp = splitted[1].trim();
-                    }
-                }
-                var encoding = '';
-                switch (cp) {
-                    case '65000': // UTF-7
-                        encoding = 'UTF-7';
-                        break;
-                    case '65001': // UTF-8
-                        encoding = 'UTF-8';
-                        break;
-                    default: // Other Encoding
-                        if (/^-?[\d.]+(?:e-?\d+)?$/.test(cp)) {
-                            encoding = 'cp' + cp;
-                        }
-                        else {
-                            encoding = cp;
-                        }
-                }
-                console.log('encoding', encoding);
-                var buffer = iconv_lite_1.default.encode(iconv_lite_1.default.decode(Buffer.from(execution_string, 'utf8'), encoding), 'UTF-8');
-                var lines = buffer.toString().split('\r\r\n');
+                var lines = execution_string.split('\r\r\n');
                 var newDiskIteration = false;
                 var caption = '';
                 var description = '';
@@ -99,8 +70,8 @@ var Windows = /** @class */ (function () {
                     }
                 });
             });
+            return resolve(drives);
         });
-        return drives;
     };
     return Windows;
 }());

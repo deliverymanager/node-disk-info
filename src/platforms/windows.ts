@@ -2,7 +2,6 @@ import { Constants } from '../utils/constants';
 
 import Drive from '../classes/drive';
 import { Utils } from "../utils/utils";
-import iconv from 'iconv-lite';
 
 /**
  * Class with Windows specific logic to get disk info.
@@ -14,46 +13,16 @@ export class Windows {
      *
      * @return {Drive[]} List of drives and their info.
      */
-    public static run(): Drive[] {
-
+    public static run(): Promise<Drive[]> {
         const drives: Drive[] = [];
-        Utils.execute(Constants.WINDOWS_COMMAND).then((execution_string: string) => {
+        return new Promise((resolve) => {
+            Utils.execute(Constants.WINDOWS_COMMAND).then((execution_string: any) => {
 
-            if (!execution_string) {
-                return;
-            }
-
-            Utils.chcp().then((cp: string) => {
-                console.log('cp', cp);
-
-                if (!cp) {
-                    return;
-                }
-                if (cp) {
-                    const splitted = cp.split(':');
-                    if (splitted && splitted.length) {
-                        cp = splitted[1].trim();
-                    }
+                if (!execution_string) {
+                    return drives;
                 }
 
-                let encoding = '';
-                switch (cp) {
-                    case '65000': // UTF-7
-                        encoding = 'UTF-7';
-                        break;
-                    case '65001': // UTF-8
-                        encoding = 'UTF-8';
-                        break;
-                    default: // Other Encoding
-                        if (/^-?[\d.]+(?:e-?\d+)?$/.test(cp)) {
-                            encoding = 'cp' + cp;
-                        } else {
-                            encoding = cp;
-                        }
-                }
-                console.log('encoding', encoding);
-                const buffer = iconv.encode(iconv.decode(Buffer.from(execution_string, 'utf8'), encoding), 'UTF-8');
-                const lines = buffer.toString().split('\r\r\n');
+                const lines = execution_string.split('\r\r\n');
 
                 let newDiskIteration = false;
 
@@ -119,10 +88,7 @@ export class Windows {
 
                 });
             });
-
+            return resolve(drives);
         });
-
-        return drives;
     }
-
 }

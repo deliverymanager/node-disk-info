@@ -9,15 +9,9 @@ export declare class Utils {
      */
     static detectPlatform(): string;
     /**
-     * Get chcp value (only for Win32 platform).
-     *
-     * @return {string} Platform: win32.
-     */
-    static chcp(): any;
-    /**
      * Executes a command in SO console.
      *
      * @param {Buffer} command: Command to execute.
      */
-    static execute(command: string): any;
+    static execute(command: string): Promise<any>;
 }

@@ -16,32 +16,12 @@ export class Utils {
     }
 
     /**
-     * Get chcp value (only for Win32 platform).
-     *
-     * @return {string} Platform: win32.
-     */
-    public static chcp(): any {
-        return new Promise((resolve) => {
-            exec('chcp', { windowsHide: true }, (error, stdout, stderr) => {
-                if (error) {
-                    console.log('execSync', error);
-                    return resolve(null);
-                }
-                if (stderr) {
-                    console.log('stderr', stderr);
-                    return resolve(null);
-                }
-                return resolve(stdout);
-            });
-        });
-    }
-
-    /**
      * Executes a command in SO console.
      *
      * @param {Buffer} command: Command to execute.
      */
-    public static execute(command: string): any {
+
+    public static execute(command: string): Promise <any> {
         return new Promise((resolve) => {
             exec(command, { windowsHide: true }, (error, stdout, stderr) => {
                 if (error) {
