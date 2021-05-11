@@ -19,7 +19,7 @@ export class Darwin {
         const buffer = Utils.execute(Constants.DARWIN_COMMAND);
         const lines = buffer.toString().split('\n');
 
-        lines.forEach((value, index, array) => {
+        lines.forEach((value: string, index: any, array: any) => {
 
             if (value !== '') {
 

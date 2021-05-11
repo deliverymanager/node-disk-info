@@ -19,7 +19,7 @@ export class Linux {
         const buffer = Utils.execute(Constants.LINUX_COMMAND);
         const lines = buffer.toString().split('\n');
 
-        lines.forEach((value) => {
+        lines.forEach((value: string) => {
 
             if (value !== '') {
 

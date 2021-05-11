@@ -42,7 +42,19 @@ var Utils = /** @class */ (function () {
      * @return {string} Platform: win32.
      */
     Utils.chcp = function () {
-        return child_process_1.execSync('chcp', { windowsHide: true }).toString().split(':')[1].trim();
+        return new Promise(function (resolve) {
+            child_process_1.exec('chcp', { windowsHide: true }, function (error, stdout, stderr) {
+                if (error) {
+                    console.log('execSync', error);
+                    return resolve(null);
+                }
+                if (stderr) {
+                    console.log('stderr', stderr);
+                    return resolve(null);
+                }
+                return resolve(stdout);
+            });
+        });
     };
     /**
      * Executes a command in SO console.
@@ -50,13 +62,19 @@ var Utils = /** @class */ (function () {
      * @param {Buffer} command: Command to execute.
      */
     Utils.execute = function (command) {
-        try {
-            return child_process_1.execSync(command, { windowsHide: true, encoding: 'buffer' });
-        }
-        catch (err) {
-            console.log('err', err);
-            return Buffer.from('\r\r\n', 'utf8');
-        }
+        return new Promise(function (resolve) {
+            child_process_1.exec(command, { windowsHide: true }, function (error, stdout, stderr) {
+                if (error) {
+                    console.log('execSync', error);
+                    return resolve('\r\r\n');
+                }
+                if (stderr) {
+                    console.log('stderr', stderr);
+                    return resolve('\r\r\n');
+                }
+                return resolve(stdout);
+            });
+        });
     };
     return Utils;
 }());

@@ -21,68 +21,84 @@ var Windows = /** @class */ (function () {
      */
     Windows.run = function () {
         var drives = [];
-        var buffer = utils_1.Utils.execute(constants_1.Constants.WINDOWS_COMMAND);
-        var cp = utils_1.Utils.chcp();
-        var encoding = '';
-        switch (cp) {
-            case '65000': // UTF-7
-                encoding = 'UTF-7';
-                break;
-            case '65001': // UTF-8
-                encoding = 'UTF-8';
-                break;
-            default: // Other Encoding
-                if (/^-?[\d.]+(?:e-?\d+)?$/.test(cp)) {
-                    encoding = 'cp' + cp;
-                }
-                else {
-                    encoding = cp;
-                }
-        }
-        buffer = iconv_lite_1.default.encode(iconv_lite_1.default.decode(buffer, encoding), 'UTF-8');
-        var lines = buffer.toString().split('\r\r\n');
-        var newDiskIteration = false;
-        var caption = '';
-        var description = '';
-        var freeSpace = 0;
-        var size = 0;
-        lines.forEach(function (value) {
-            if (value !== '') {
-                var tokens = value.split('=');
-                var section = tokens[0];
-                var data = tokens[1];
-                switch (section) {
-                    case 'Caption':
-                        caption = data;
-                        newDiskIteration = true;
-                        break;
-                    case 'Description':
-                        description = data;
-                        break;
-                    case 'FreeSpace':
-                        freeSpace = isNaN(parseFloat(data)) ? 0 : +data;
-                        break;
-                    case 'Size':
-                        size = isNaN(parseFloat(data)) ? 0 : +data;
-                        break;
-                }
+        utils_1.Utils.execute(constants_1.Constants.WINDOWS_COMMAND).then(function (execution_string) {
+            if (!execution_string) {
+                return;
             }
-            else {
-                if (newDiskIteration) {
-                    var used = (size - freeSpace);
-                    var percent = '0%';
-                    if (size > 0) {
-                        percent = Math.round((used / size) * 100) + '%';
+            utils_1.Utils.chcp().then(function (cp) {
+                console.log('cp', cp);
+                if (!cp) {
+                    return;
+                }
+                if (cp) {
+                    var splitted = cp.split(':');
+                    if (splitted && splitted.length) {
+                        cp = splitted[1].trim();
                     }
-                    var d = new drive_1.default(description, size, used, freeSpace, percent, caption);
-                    drives.push(d);
-                    newDiskIteration = false;
-                    caption = '';
-                    description = '';
-                    freeSpace = 0;
-                    size = 0;
                 }
-            }
+                var encoding = '';
+                switch (cp) {
+                    case '65000': // UTF-7
+                        encoding = 'UTF-7';
+                        break;
+                    case '65001': // UTF-8
+                        encoding = 'UTF-8';
+                        break;
+                    default: // Other Encoding
+                        if (/^-?[\d.]+(?:e-?\d+)?$/.test(cp)) {
+                            encoding = 'cp' + cp;
+                        }
+                        else {
+                            encoding = cp;
+                        }
+                }
+                console.log('encoding', encoding);
+                var buffer = iconv_lite_1.default.encode(iconv_lite_1.default.decode(Buffer.from(execution_string, 'utf8'), encoding), 'UTF-8');
+                var lines = buffer.toString().split('\r\r\n');
+                var newDiskIteration = false;
+                var caption = '';
+                var description = '';
+                var freeSpace = 0;
+                var size = 0;
+                lines.forEach(function (value) {
+                    if (value !== '') {
+                        var tokens = value.split('=');
+                        var section = tokens[0];
+                        var data = tokens[1];
+                        switch (section) {
+                            case 'Caption':
+                                caption = data;
+                                newDiskIteration = true;
+                                break;
+                            case 'Description':
+                                description = data;
+                                break;
+                            case 'FreeSpace':
+                                freeSpace = isNaN(parseFloat(data)) ? 0 : +data;
+                                break;
+                            case 'Size':
+                                size = isNaN(parseFloat(data)) ? 0 : +data;
+                                break;
+                        }
+                    }
+                    else {
+                        if (newDiskIteration) {
+                            var used = (size - freeSpace);
+                            var percent = '0%';
+                            if (size > 0) {
+                                percent = Math.round((used / size) * 100) + '%';
+                            }
+                            var d = new drive_1.default(description, size, used, freeSpace, percent, caption);
+                            drives.push(d);
+                            newDiskIteration = false;
+                            caption = '';
+                            description = '';
+                            freeSpace = 0;
+                            size = 0;
+                        }
+                    }
+                });
+            });
         });
         return drives;
     };

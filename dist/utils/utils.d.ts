@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /**
  * Class with utilitary methods.
  */
@@ -14,11 +13,11 @@ export declare class Utils {
      *
      * @return {string} Platform: win32.
      */
-    static chcp(): string;
+    static chcp(): any;
     /**
      * Executes a command in SO console.
      *
      * @param {Buffer} command: Command to execute.
      */
-    static execute(command: string): Buffer;
+    static execute(command: string): any;
 }

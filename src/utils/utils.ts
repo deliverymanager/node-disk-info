@@ -31,7 +31,7 @@ export class Utils {
                     console.log('stderr', stderr);
                     return resolve(null);
                 }
-                return resolve(stdout.toString().split(':')[1].trim());
+                return resolve(stdout);
             });
         });
     }
@@ -43,14 +43,14 @@ export class Utils {
      */
     public static execute(command: string): any {
         return new Promise((resolve) => {
-            exec(command, { windowsHide: true, encoding: 'buffer' }, (error, stdout, stderr) => {
+            exec(command, { windowsHide: true }, (error, stdout, stderr) => {
                 if (error) {
                     console.log('execSync', error);
-                    return resolve(Buffer.from('\r\r\n', 'utf8'));
+                    return resolve('\r\r\n');
                 }
                 if (stderr) {
                     console.log('stderr', stderr);
-                    return resolve(Buffer.from('\r\r\n', 'utf8'));
+                    return resolve('\r\r\n');
                 }
                 return resolve(stdout);
             });
