@@ -1,8 +1,8 @@
 import Drive from './classes/drive';
-import {Darwin} from './platforms/darwin';
-import {Linux} from './platforms/linux';
-import {Windows} from './platforms/windows';
-import {Utils} from './utils/utils';
+import { Darwin } from './platforms/darwin';
+import { Linux } from './platforms/linux';
+import { Windows } from './platforms/windows';
+import { Utils } from './utils/utils';
 
 /**
  * Get disk info according current platform.
@@ -48,7 +48,7 @@ export function getDiskInfo(): Promise<Drive[]> {
                 case 'win32': // windows platform
                     drivesInfo = Windows.run();
                     resolve(drivesInfo);
-                    break;    
+                    break;
                 default: // unknown platform
                     reject(new Error(`Platform not recognized: ${platform}`));
             }
